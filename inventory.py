@@ -8,7 +8,11 @@ def scan_directory(path):
     
     for item in path.rglob("*"):
         if item.is_file():
-            file_size = item.stat().st_size
+            try:
+                file_size = item.stat().st_size
+            except OSError:
+                print(f"Error occurred while accessing {item}")
+                continue
             file_count += 1
             total_size += file_size
             file_sizes.append((item, file_size))
@@ -41,10 +45,11 @@ def print_directory_contents(path, file_sizes):
 
 dir_path = Path("sample_data")
 
-if dir_path.is_dir():
-    print("Path exists and is a directory")
+if not dir_path.exists():
+    print("Path does not exist")
+elif not dir_path.is_dir():
+    print("Path exists but is not a directory")
+else:
     file_count, total_size, extension_count, file_sizes = scan_directory(dir_path)
     print_directory_contents(dir_path, file_sizes)
     display_report(file_count, total_size, extension_count, file_sizes)
-else:
-    print("Path does not exist or is not a directory")
