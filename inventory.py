@@ -1,4 +1,10 @@
 from pathlib import Path
+import argparse
+
+parser = argparse.ArgumentParser(description="Scan a directory and display file inventory.")
+parser.add_argument("--path", required=True, help="Path to the directory to scan")
+
+args = parser.parse_args()
 
 def scan_directory(path):
     file_count = 0
@@ -43,7 +49,7 @@ def print_directory_contents(path, file_sizes):
         print(f"{item} - {size} bytes")    
 
 
-dir_path = Path("sample_data")
+dir_path = Path(args.path)
 
 if not dir_path.exists():
     print("Path does not exist")
